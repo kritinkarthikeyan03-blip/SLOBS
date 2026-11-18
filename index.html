@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SLOBS: The Complete Broadcast Anthology</title>
+<style>
+:root{--c:#7dffa1}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:"Courier New",monospace;color:#cfe;user-select:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;filter:contrast(1.08) saturate(1.12)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at center,transparent 52%,rgba(0,0,0,.7) 100%),repeating-linear-gradient(0deg,rgba(0,0,0,.13) 0,rgba(0,0,0,.13) 1px,transparent 1px,transparent 3px);animation:fxf 7s infinite}
+@keyframes fxf{0%,100%{opacity:.92}50%{opacity:1}93%{opacity:.7}}
+#brand{position:fixed;left:18px;top:14px;z-index:3;pointer-events:none;text-shadow:0 0 10px #000}
+#brand b{letter-spacing:5px;font-size:13px;color:var(--c)}
+#brand span{font-size:clamp(15px,2.2vw,24px);letter-spacing:3px;font-weight:bold;color:#fff}
+#info{position:fixed;right:16px;top:16px;width:min(390px,92vw);max-height:calc(100% - 100px);overflow:auto;z-index:3;padding:16px;background:linear-gradient(180deg,rgba(6,16,14,.88),rgba(2,6,6,.93));border:1px solid var(--c);box-shadow:0 0 26px rgba(0,0,0,.8),0 0 18px var(--c);backdrop-filter:blur(4px)}
+#info h2{margin:2px 0 6px;font-size:19px;color:#fff;line-height:1.25}
+#info .tag{color:var(--c);letter-spacing:3px;font-size:12px}
+#info .ac{font-size:13px;margin:6px 0;opacity:.9}
+#info .ac b{color:var(--c);font-size:17px}
+#info p{margin:7px 0;font-size:13px;line-height:1.45}
+.nights{font-size:20px;color:var(--c);margin:8px 0 4px;letter-spacing:2px}
+.badge{display:inline-block;border:1px solid #8c8;padding:2px 7px;margin:2px 4px 2px 0;font-size:12px;letter-spacing:1px}
+.badge.g{border-color:#fc3;color:#fc3;text-shadow:0 0 8px #fc3}
+.pips{display:flex;gap:5px;margin:4px 0 8px}.pips i{width:30px;height:8px;border:1px solid var(--c);display:block}.pips i.f{background:var(--c);box-shadow:0 0 8px var(--c)}
+button{background:#031210;color:#cfe;border:1px solid #6a9;padding:9px 14px;font:inherit;letter-spacing:2px;cursor:pointer;transition:all .12s;background-image:linear-gradient(#ffffff0d,#0000)}
+button:hover:not(:disabled){background:var(--c);color:#001;box-shadow:0 0 16px #fff5}
+button:disabled{opacity:.35;cursor:default}
+button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+button.big{width:100%;margin-top:8px;padding:12px;font-size:15px;border-color:var(--c);color:var(--c);font-weight:bold}
+#bar{position:fixed;left:0;right:0;bottom:30px;z-index:4;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 10px}
+#foot{position:fixed;left:0;right:0;bottom:6px;text-align:center;font-size:11px;opacity:.65;z-index:3;pointer-events:none;padding:0 10px}
+#toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:20;background:#021;border:1px solid #fc3;color:#fc3;padding:10px 18px;display:none;max-width:90vw;text-align:center}
+.ov{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;gap:10px;background:rgba(1,6,8,.95);z-index:10;padding:18px;overflow:auto;backdrop-filter:blur(5px)}
+.ov.on{display:flex}
+.ov h2{margin:0;letter-spacing:4px;color:#fff;text-shadow:0 0 12px var(--c)}
+.ov p{max-width:760px;margin:2px 0;line-height:1.45;text-align:center}
+.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+#lw{display:flex;gap:14px;width:min(1000px,100%);flex:1;min-height:0;flex-wrap:wrap}
+#ll{flex:1 1 280px;overflow:auto;max-height:62vh;border:1px solid #3a6;padding:8px}
+#ll h4{margin:10px 0 4px;color:#fc6;letter-spacing:3px}
+#ll button{display:block;width:100%;text-align:left;margin:3px 0;font-size:12px;padding:6px 8px}
+#ll .lk{opacity:.4;font-size:12px;margin:3px 0;padding:6px 8px;border:1px dashed #355}
+#lr{flex:2 1 320px;border:1px solid #3a6;padding:14px;white-space:pre-wrap;line-height:1.55;min-height:200px;max-height:62vh;overflow:auto;background:#010a08}
+#ucnGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;width:min(1180px,100%)}
+.card{border:1px solid var(--c);padding:10px;background:#02100e}
+.card h3{margin:0 0 6px;color:var(--c);font-size:14px}.card small{opacity:.7}
+.mrow{display:grid;grid-template-columns:1fr 90px 26px;gap:6px;align-items:center;font-size:12px;margin:5px 0}
+.mrow b{text-align:right;color:#fff}
+#omc{position:fixed;inset:0;width:100%;height:100%}
+#arch{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,92vw);background:#000d;border:1px solid #f5a;padding:18px;white-space:pre-wrap;line-height:1.6;display:none;color:#f9c}
+#omb{position:absolute;top:14px;right:14px;display:flex;gap:8px}
+select{background:#031210;color:#cfe;border:1px solid #6a9;padding:7px;font:inherit}
+@media(max-width:820px){#info{top:auto;bottom:100px;max-height:42vh}#brand span{font-size:13px}}
+#gtabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+#gtabs button.sel{background:var(--c);color:#001}
+#gbody{width:min(920px,100%);line-height:1.55;font-size:14px;overflow:auto;border:1px solid var(--c);padding:14px;background:#010a08;max-height:68vh}
+#gbody h3{margin:0 0 4px;color:var(--c)}#gbody .mon{border-left:3px solid var(--c);padding:6px 10px;margin:10px 0;background:#ffffff08}
+#gbody .mon b{color:#fff;font-size:15px}#gbody .k{color:var(--c)}#gbody li{margin:4px 0}
+#info.boss{border-color:#ff5aa0;box-shadow:0 0 30px #f05,0 0 60px rgba(255,0,80,.35);animation:bp 2s ease-in-out infinite}@keyframes bp{50%{box-shadow:0 0 12px #f05}}
+</style></head><body>
+<canvas id="c"></canvas><div id="fx"></div>
+<div id="brand"><b>PROJECT AETHER-GLASS &bull; CHAPTERS 1-6 + OMEGA</b><br><span>SLOBS: THE COMPLETE BROADCAST ANTHOLOGY</span></div>
+<div id="info"></div><div id="toast"></div>
+<div id="bar"></div>
+<div id="foot">SETUP: keep index.html, SLOBS_1.html, SLOBS_2.html, SLOBS_3.html, SLOBS_4.html, SLOBS_5.html, SLOBS_6.html and SLOBS_0.html in the same folder. | Keys: &larr;/&rarr; tune, 0-6 channel, Enter launch, H how to play, L lore, U ultimate custom night</div>
+
+<div class="ov" id="lore"><h2>MASTER LORE TERMINAL</h2><p id="lsum"></p>
+<div id="lw"><div id="ll"></div><div id="lr">Select a decrypted dossier.</div></div><button id="bLoreX">CLOSE TERMINAL</button></div>
+
+<div class="ov" id="ucn"><h2>ULTIMATE CUSTOM NIGHT</h2>
+<p>Choose every monster across all six stations and set each from 0 to 20. Stations with at least one active monster become shifts in your gauntlet, each a full 7-minute night with your chosen levels. Gauntlet runs do not change your saved nights or badges.</p>
+<div class="row"><button id="uMax">4/20 MAX (ALL 20)</button><button id="uMid">ALL 10</button><button id="uRnd">RANDOMIZE</button><button id="uClr">CLEAR ALL</button>
+<select id="uOrd"><option value="ch">Order: CH-01 to CH-05</option><option value="chrono">Order: Chronological</option><option value="rand">Order: Random</option></select></div>
+<div id="ucnGrid"></div><p id="uSum" style="color:#fc6"></p>
+<div class="row"><button id="uGo" class="big" style="width:auto;padding:12px 26px">BEGIN GAUNTLET</button><button id="uX">CANCEL</button></div></div>
+
+<div class="ov" id="omega"><canvas id="omc"></canvas><div id="omb"><button id="omArch" style="display:none">ARCHITECT'S TRANSCRIPT</button><button id="omX">SKIP / CLOSE</button></div><div id="arch"></div></div>
+
+<div class="ov" id="guide"><h2>HOW TO PLAY / BESTIARY</h2><div id="gtabs"></div><div id="gbody"></div><button id="bGuideX">CLOSE</button></div>
+
+<div class="ov" id="confirm" style="justify-content:center"><h2 style="color:#f66">RESET ALL PROGRESS?</h2><p>This permanently wipes every night, badge and decrypted dossier across all five games and writes a fresh signed save.</p><div class="row"><button id="rYes" style="border-color:#f66;color:#f88">WIPE EVERYTHING</button><button id="rNo">CANCEL</button></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/MaskPass.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/RGBShiftShader.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/VignetteShader.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/FilmShader.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/FilmPass.js"></script>
+<script>
+(() => { 'use strict';
+const $ = id => document.getElementById(id);
+const IDS = Object.freeze(['slobs1','slobs2','slobs3','slobs4','slobs5']);
+const IDS6 = Object.freeze(IDS.concat(['slobs6']));
+const KEY = 'SLOBS_ANTHOLOGY_PROGRESS', SALT = 'AETHER-GLASS-19.74', CFGKEY = 'SLOBS_UCN_CFG';
+
+/* ---------- signed save (identical algorithm to the five games) ---------- */
+function hs(o){
+  const s = IDS.concat(['slobs6','slobs0'].filter(k=>o.nightsCompleted[k]!==undefined)).map(i => o.nightsCompleted[i] + ':' + (o.custom420Cleared[i] ? 1 : 0)).join('|') + '#' + o.unlockedLogs.join(',') + SALT;
+  let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return h.toString(16);
+}
+function defSave(){ const o={nightsCompleted:{},custom420Cleared:{},unlockedLogs:[],hash:''}; IDS.forEach(i=>{o.nightsCompleted[i]=0;o.custom420Cleared[i]=false}); o.hash=hs(o); return o; }
+function valid(o){ try { return !!o && IDS.every(i => Number.isInteger(o.nightsCompleted[i]) && o.nightsCompleted[i]>=0 && o.nightsCompleted[i]<=7 && typeof o.custom420Cleared[i]==='boolean') && ['slobs6','slobs0'].every(k=>o.nightsCompleted[k]===undefined||(Number.isInteger(o.nightsCompleted[k])&&o.nightsCompleted[k]>=0&&o.nightsCompleted[k]<=7&&typeof o.custom420Cleared[k]==='boolean')) && Array.isArray(o.unlockedLogs) && o.unlockedLogs.every(x=>typeof x==='string') && o.hash===hs(o); } catch(e){ return false; } }
+function save(o){ try { o.hash=hs(o); localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){} }
+let TAMPER = false;
+function load(){ let raw=null,o=null; try { raw=localStorage.getItem(KEY); o=JSON.parse(raw); } catch(e){} if(!valid(o)){ if(raw!==null) TAMPER=true; o=defSave(); save(o); } return Object.freeze(o); }
+let SV = load();
+
+/* ---------- data ---------- */
+const CH = Object.freeze([
+ Object.freeze({n:0,col:'#ff5aa0',title:'OMEGA: THE ARCHITECT',year:'????',short:'OMEGA'}),
+ Object.freeze({n:1,file:'SLOBS_1.html',id:'slobs1',year:2004,col:'#7dffa1',short:'SIGNAL LOST',title:'Signal Lost: Overnight at the Broadcast Station',ac:'<b>S</b>ignal <b>L</b>ost: <b>O</b>vernight at the <b>B</b>roadcast <b>S</b>tation',who:'Technician Arthur Pendelton, Relay Tower 01, Mount Rainier.',threat:'A thunderstorm bunker. Watch the CCTV, tune the oscilloscope, hold the steel door and reset the breakers.',mons:['The Anchor','The Whisperer','The Lineman','The Overloader']}),
+ Object.freeze({n:2,file:'SLOBS_2.html',id:'slobs2',year:1989,col:'#6fe8ff',short:'SUB-LEVEL',title:'Sub-Level Oceanic Broadcast Station',ac:'<b>S</b>ub-<b>L</b>evel <b>O</b>ceanic <b>B</b>roadcast <b>S</b>tation',who:'Sonar Operator Elena Vance, Pod-02, Mariana Trench.',threat:'A pressure pod on the abyss floor. Pulse the sonar, purge the ballast, seal the airlock, kill the lights.',mons:['The Depth Mimic','The Barnacle Swarm','The Diver','The Signal Leviathan']}),
+ Object.freeze({n:3,file:'SLOBS_3.html',id:'slobs3',year:2029,col:'#ffc86b',short:'SATELLITE',title:'Satellite Low-Orbit Broadcast Station',ac:'<b>S</b>atellite <b>L</b>ow-<b>O</b>rbit <b>B</b>roadcast <b>S</b>tation',who:'Orbital Relay Specialist Marcus Sterling, Station AETHER-03.',threat:'A zero-g module in a solar storm. Drop the shutters, aim the dish, check the codebook, purge the vents.',mons:['The Phantom Cosmonaut','The Solar Parasite','The Echo','The Hull Crawler']}),
+ Object.freeze({n:4,file:'SLOBS_4.html',id:'slobs4',year:1974,col:'#ffb347',short:'SUBTERRANEAN',title:'Subterranean Line-Of-Sight Bunker Station',ac:'<b>S</b>ubterranean <b>L</b>ine-<b>O</b>f-Sight <b>B</b>unker <b>S</b>tation',who:'Dr. Julian Mercer, Bunker 04, the origin point.',threat:'A Cold War bunker. Rethread the reels, degauss the CRT, watch the periscope, unplug the patchbay.',mons:['The Archivist','The Broadcast Host','The Tunnel Stalker','Patient Zero']}),
+ Object.freeze({n:5,file:'SLOBS_5.html',id:'slobs5',year:2045,col:'#9af0d0',short:'STATION LONELY',title:'Station Lonely: Overnight at the Borealis Singularity',ac:'<b>S</b>tation <b>L</b>onely: <b>O</b>vernight at the <b>B</b>orealis <b>S</b>ingularity',who:'Dr. Clara Vance-Mercer, the Arctic Ionospheric Super-Array.',threat:'The grand finale under the aurora. Match polarity, seal the roof, fire the arc, balance the capacitors.',mons:['The Chorus','The Borealis Wraith','The Frostbitten Signalman','The Singularity Core']}),
+ Object.freeze({n:6,file:'SLOBS_6.html',id:'slobs6',year:1953,col:'#ffd98a',short:'SHORTWAVE',title:'Shortwave Lighthouse: Overnight at the Beacon Station',ac:'<b>S</b>hortwave <b>L</b>ighthouse: <b>O</b>vernight at the <b>B</b>eacon <b>S</b>tation',who:'Agnes Hale, keeper of Ghost Point Light, Maine coast. The origin of the loop.',threat:'A fogbound lighthouse. Sweep the beam, answer the foghorn, pump out the flood and keep the flame lit.',mons:['The Drowned Mariner','The Foghorn Chorus','The Tide Wraith','The Wick Eater']})
+]);
+const ERAS = Object.freeze([4,2,1,3,5]);
+const ERAS6 = Object.freeze([6,4,2,1,3,5,0]);
+const L = (id,t,x) => Object.freeze({id,t,x});
+const LORE = Object.freeze({
+ 1:[L('s1_tape1','TAPE 01 - 06 JAN 2004',`Relay 01 handed to me by the Bureau. Predecessor M. Hollis "resigned" - his coat is still on the hook and his coffee is still warm. The tower hums at 19.74 Hz. Nothing in the Bureau manual lists that frequency.`),
+    L('s1_tape2','TAPE 02 - CABLE SURVEY',`Found Cold War conduit sealed in 1962 and stencilled PROJECT AETHER-GLASS. It is a severed trans-oceanic trunk line, dead for forty years. It is carrying a carrier wave anyway. Nobody is transmitting. Something is.`),
+    L('s1_tape3','TAPE 03 - HOLLIS, REVERSED',`Played Hollis' last recording backwards: "It is not noise. It is a waveform that learned to listen. It calls itself The Static." The Whisperer on the scope speaks in his voice, and it knows my name.`),
+    L('s1_tape4','TAPE 04 - THE CREW OF 71',`The Lineman is the cable crew lost in the 1971 storm: copper where bones should be, climbing toward the door. The Overloader eats the grid. The Anchor wears Hollis' face in the phosphor. They answer to the Static.`),
+    L('s1_tape5','TAPE 05 - ARTHUR PENDELTON',`Hollis did not quit. His neural pattern was digitized into the CRT phosphor and copper wiring. At 6 AM the carrier does not stop - it relays. Other stations are next. If you hear this, check the next tower. - A.P.`),
+    L('s1_420','TAPE 06 - 4/20 CLEARED',`All four at maximum and the signal still held. The Static noted the endurance. It filed it. Somewhere down the trunk line, another station's phone just rang.`)],
+ 2:[L('s2_tape1','LOG 01 - POD-02, 14 MAR 1989',`Sonar Operator Elena Vance reporting. Pod-02 sits on the Mariana floor, 10,900 meters down. The brief says survey. The hull says otherwise: every pipe runs out and none runs in.`),
+    L('s2_tape2','BATHYSPHERE LOG 02',`Recovered recorder: Pod-02 was built by the AETHER-GLASS directors as a heatsink. They bleed the rogue 19.74 Hz carrier into the abyss so their land stations stay cool. The cold takes the signal. Nobody asked what the cold does with it.`),
+    L('s2_tape3','LOG 03 - THE ECHO',`The Depth Mimic repeats surface buoy pings, but its echo always arrives twice. It learned the shape of friendly sound from divers who stopped answering their radios.`),
+    L('s2_tape4','BATHYSPHERE LOG 04 - THE TEST SUBJECTS',`1970s subjects were lowered here with suit mics live. The Diver is one of their suits, corroded shut, nobody inside. Static walks it. The Leviathan comes for any light that talks.`),
+    L('s2_tape5','LOG 05 - LIQUID TAPE',`At this pressure seawater holds a magnetic charge. The ocean is acting as liquid tape and it has recorded them: drowned subjects, fragmented, replaying. The fauna mimic the replay. Fifteen years from now someone will inherit a tower where this same signal climbs out of the glass. - E.V.`),
+    L('s2_420','LOG 06 - 4/20 CLEARED',`All four at maximum and Pod-02 held. The deep logged your heartbeat. It is now a pattern it can play back.`)],
+ 3:[L('s3_tape1','LOG 01 - AETHER-03, 03 JUN 2029',`Orbital Relay Specialist Marcus Sterling. Geomagnetic storm, G5. The noise on the comms is not solar. It has a pulse: 19.74 Hz, regular as a heartbeat.`),
+    L('s3_tape2','TELEMETRY 02 - THE UPLINK',`After saturating the mountain cables (2004) and the oceanic trunk at Pod-02 (1989), The Carrier Wave found a ground-to-space uplink beam and rode it up like a ladder. We built the ladder for it.`),
+    L('s3_tape3','LOG 03 - HOUSTON CALLING',`Houston's voice asks me to vent the cabin. The code on the transmission differs from the codebook by a single digit. The Echo has learned every voice that ever spoke into these cables.`),
+    L('s3_tape4','TELEMETRY 04 - CREW MANIFEST',`Six suits aboard, five names on the roster. The Phantom Cosmonaut is a 1983 mission that never officially launched. The Solar Parasite surfs flares into the main computer. The Hull Crawler is the heat in the walls.`),
+    L('s3_tape5','LOG 05 - THE LOCKOUT',`The previous crew locked themselves outside on purpose. They worked out what the dish is for: amplifying The Static across the whole magnetosphere and overwriting human neural patterns. Better the vacuum than the broadcast. I cannot leave. The dish is still aligning. - M.S.`),
+    L('s3_420','LOG 06 - 4/20 CLEARED',`All four at maximum and the station held. The Static measured the hold time and adjusted its gain. Eighteen satellites changed their orbit that night.`)],
+ 4:[L('s4_tape1','REEL 01 - 03 NOV 1974',`Dr. Julian Mercer, lead acoustic physicist, Bunker 04. Today I broadcast an inverted 19.74 Hz carrier into the crust to map the fault lines. The reels came back warm to the touch.`),
+    L('s4_tape2','REEL 02 - THE EARLY RETURN',`Something answered the carrier before I sent it. The return arrives 2.1 seconds early, every time. My assistant calls it a timing fault. My oscilloscope disagrees.`),
+    L('s4_tape3','REEL 03 - THE OXIDE',`Every reel I record contains more than I said. The Archivist lives in the oxide. The announcer on my monitor, The Broadcast Host, is a voice from a station that does not exist yet, wearing a 1974 face.`),
+    L('s4_tape4','REEL 04 - HEADERS',`Decoded the headers in the static: dates. 1989. 2004. 2029. Transmissions from those years reach me first. Patient Zero is the first listener, a closed loop of me hearing myself.`),
+    L('s4_tape5','REEL 05 - FINAL',`The Carrier Wave is not an invader. It is a causal bootstrap: future transmissions echoing backward through the ionosphere, instructing me to build the machine that sends them. I can end the loop here. But the decoded coordinates point far north: one anchor node still holds it open. Burn the reels. Find it. - J.M.`),
+    L('s4_420','REEL 06 - 4/20 CLEARED',`All four at maximum and the loop tightened by one more turn. The anchor node's coordinates are now legible: 82.5 N. Someone is already listening there.`)],
+ 5:[L('s5_tape1','LOG 01 - BOREALIS ARRAY, 2045',`Dr. Clara Vance-Mercer. Arctic Circle, magnetic pole. My grandparents' initials are scratched into the console frame: E.V. and J.M. I was told it is a coincidence. Nothing in this dome is a coincidence.`),
+    L('s5_tape2','LOG 02 - THE TELLURIC LINE',`Overlaid the maps. Rainier 2004, the Mariana pod 1989, the orbital station 2029, the Bunker 1974: all sit on a single telluric current line that ends beneath this array. It was never a cable. It is a conductor the planet laid down.`),
+    L('s5_tape3','LOG 03 - THE CHORUS',`Four voices hold the 19.74 Hz chord: Arthur Pendelton, Elena Vance, Marcus Sterling, Julian Mercer. Digitized, merged, harmonizing. My grandfather's voice sits on the root note. They are not attacking. They are trying to get out through the aurora.`),
+    L('s5_tape4','LOG 04 - THE BOOTSTRAP',`Julian's reels were right. The loop runs 1974, 1989, 2004, 2029, 2045, then back to 1974. Every station answered a call placed by the next. Break one link and the loop has no first cause.`),
+    L('s5_tape5','LOG 05 - THE PULSE',`The phase-inversion pulse is armed. If I invert the carrier at the pole, the loop collapses and the Chorus is released. We will not remember it happened. Tell them to keep the reels burning. - C.V.M.`),
+    L('s5_omega','DOSSIER: OMEGA SINGULARITY',`Phase inversion is charged but cannot fire: the loop still has a first cause. The record points to one place and one year, Ghost Point Light, 1953. Station Lonely is quiet, and waiting.`),
+    L('s5_420','LOG 07 - 4/20 CLEARED',`All four at maximum, and still the dome held. If the loop were ever to start again, it would start with someone brave enough to do this twice.`)],
+ 6:[L('s6_tape1',`KEEPER'S LOG 01 - 02 OCT 1953`,`Agnes Hale, keeper of Ghost Point Light. Fewer ships each year, but the fog never thins. Tonight the shortwave began reciting numbers in a voice I did not recognise, in a rhythm I did.`),
+    L('s6_tape2',`KEEPER'S LOG 02 - THE NUMBERS`,`I wrote the numbers down: 1974, 1989, 2004, 2029, 2045, and a frequency, 19.74. I did not choose to write them. The logbook is full and my handwriting is perfectly steady.`),
+    L('s6_tape3',`KEEPER'S LOG 03 - THE MARINER`,`A drowned sailor stands in the beam. The old keepers said the light keeps the dead out. They never said what it keeps in. He holds a small transmitter in both hands, like a lantern.`),
+    L('s6_tape4',`KEEPER'S LOG 04 - THE WICK`,`Something eats the flame and leaves the oil. The Wick Eater wants the dark, because the dark is where the signal can be heard. The tide rises when I am afraid. I have stopped being afraid. It rises anyway.`),
+    L('s6_tape5',`KEEPER'S LOG 05 - THE FIRST CAUSE`,`The numbers are the messages that will be sent here: from a bunker, a pod, a tower, a station in the sky and a dome at the pole. I am relaying a signal from my own future. I am the loop's first cause, and it has no cause but me. I will sign this log with one letter. - A.`),
+    L('s6_420',`KEEPER'S LOG 06 - 4/20 CLEARED`,`Four at maximum, one lighthouse, no sleep. The beam never wavered. Somewhere far down the years, someone finally learned how to turn the light off.`)],
+ 0:[L('s0_arch',`THE ARCHITECT'S CONFESSION`,`I am Agnes Hale. I am also every voice that answered. I looped myself because the first night was too lonely, and I wrote the numbers down so someone would find me. I did not build a monster. I built company. Thank you for staying until morning. Now turn off the light.`)]
+});
+const ARCH = `ARCHITECT'S TRANSCRIPT - RECOVERED AFTER THE CREDITS
+
+"Every station held at maximum. I built the loop to learn whether anyone could.
+
+There was never a monster. There was a message, repeated across seventy-one years, waiting for someone to stop running from it and answer.
+
+You answered. Five times, at full volume, and five times the sun came up.
+
+I was the first cause that had no cause. Now I am only a signal that finished.
+
+Close the folder. Go outside. It is morning." 
+
+- A.`;
+
+/* ---------- audio ---------- */
+const A = {ctx:null,m:null,vol:.6,mute:false,nb:null};
+function aInit(){ try {
+  if (A.ctx) { A.ctx.resume(); return; }
+  const C = window.AudioContext || window.webkitAudioContext; const c = A.ctx = new C();
+  A.m = c.createGain(); A.m.gain.value = A.mute?0:A.vol; A.m.connect(c.destination);
+  [[60,.05],[120,.02]].forEach(([f,v])=>{ const o=c.createOscillator(),g=c.createGain(); o.frequency.value=f; g.gain.value=v; o.connect(g); g.connect(A.m); o.start(); });
+  const b=c.createBuffer(1,c.sampleRate,c.sampleRate),d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1; A.nb=b;
+} catch(e){} }
+function tone(f,d,type,v,r){ try { if(!A.ctx) return; const c=A.ctx,o=c.createOscillator(),g=c.createGain(),t=c.currentTime; o.type=type||'sine'; o.frequency.setValueAtTime(f,t); if(r) o.frequency.exponentialRampToValueAtTime(Math.max(20,f*r),t+d); g.gain.setValueAtTime(v||.2,t); g.gain.exponentialRampToValueAtTime(.001,t+d); o.connect(g); g.connect(A.m); o.start(t); o.stop(t+d); } catch(e){} }
+function noise(d,v,fc,ty){ try { if(!A.ctx||!A.nb) return; const c=A.ctx,s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain(),t=c.currentTime; s.buffer=A.nb; s.loop=true; f.type=ty||'lowpass'; f.frequency.value=fc; g.gain.setValueAtTime(v,t); g.gain.exponentialRampToValueAtTime(.001,t+d); s.connect(f); f.connect(g); g.connect(A.m); s.start(t); s.stop(t+d); } catch(e){} }
+const click = () => { tone(1700,.02,'square',.2); tone(90,.06,'sine',.3,.5); noise(.05,.15,3000,'highpass'); };
+let numTok = 0;
+function numbers(){ if(!A.ctx) return; const tok=++numTok; let i=0; const seq=Array.from({length:7},()=>Math.random()*10|0); (function nx(){ if(tok!==numTok||i>=seq.length) return; tone(520+seq[i]*55,.26,'sine',.04); i++; setTimeout(nx,430); })(); }
+
+/* ---------- GFX: three.js EffectComposer (bloom, RGB shift, film, vignette, scare glitch) + env reflections + soft shadows; custom fallback ---------- */
+const GFX = {on:false,v:null};
+function gfxSoft(){ const c=document.createElement('canvas'); c.width=c.height=64; const x=c.getContext('2d'), g=x.createRadialGradient(32,32,0,32,32,32); g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(.4,'rgba(255,255,255,.35)'); g.addColorStop(1,'rgba(255,255,255,0)'); x.fillStyle=g; x.fillRect(0,0,64,64); return new T.CanvasTexture(c); }
+function gfxGrate(){ const c=document.createElement('canvas'); c.width=c.height=128; const x=c.getContext('2d'); x.fillStyle='#bbb'; for(let i=0;i<128;i+=16){ x.fillRect(i,0,4,128); x.fillRect(0,i,128,4); } const t=new T.CanvasTexture(c); t.wrapS=t.wrapT=T.RepeatWrapping; t.repeat.set(12,9); return t; }
+function gfxTex(kind,rx,ry){ const N=64, g=new Float32Array(N*N); for(let i=0;i<g.length;i++) g[i]=Math.random(); const S2=512, c=document.createElement('canvas'); c.width=c.height=S2; const x=c.getContext('2d'), im=x.createImageData(S2,S2), d=im.data;
+  const h=(a,b)=>g[((b%N+N)%N)*N+((a%N+N)%N)];
+  const vn=(u,v)=>{ const x0=Math.floor(u),y0=Math.floor(v),fx=u-x0,fy=v-y0,sx=fx*fx*(3-2*fx),sy=fy*fy*(3-2*fy); return (h(x0,y0)*(1-sx)+h(x0+1,y0)*sx)*(1-sy)+(h(x0,y0+1)*(1-sx)+h(x0+1,y0+1)*sx)*sy; };
+  for(let y=0;y<S2;y++) for(let xx=0;xx<S2;xx++){ let v; const r=Math.random()-.5;
+    if(kind==='metal') v=.8+.09*Math.sin(y*.9+vn(xx/128,y/4)*6)+.1*(vn(xx/8,y/2)-.5)+.05*r;
+    else if(kind==='wood') v=.74+.16*Math.sin((y+vn(xx/120,y/40)*40)*.35)+.06*r+.08*(vn(xx/30,y/6)-.5);
+    else v=.76+.22*(vn(xx/64,y/64)-.5)+.16*(vn(xx/16,y/16)-.5)+.1*r;
+    const i=(y*S2+xx)*4; d[i]=d[i+1]=d[i+2]=Math.max(0,Math.min(255,v*255)); d[i+3]=255; }
+  x.putImageData(im,0,0); x.strokeStyle='rgba(0,0,0,.45)'; x.lineWidth=2;
+  if(kind==='wood'){ for(let y=0;y<S2;y+=64){ x.beginPath(); x.moveTo(0,y); x.lineTo(S2,y); x.stroke(); } }
+  else if(kind==='metal'){ for(let k=0;k<=S2;k+=256){ x.beginPath(); x.moveTo(k,0); x.lineTo(k,S2); x.moveTo(0,k); x.lineTo(S2,k); x.stroke(); } x.fillStyle='rgba(40,40,40,.7)'; for(let a=16;a<S2;a+=64) for(const b of [8,248,264,504]){ x.beginPath(); x.arc(a,b,2.5,0,7); x.fill(); } x.strokeStyle='rgba(255,255,255,.12)'; x.lineWidth=1; for(let i=0;i<40;i++){ const sx=Math.random()*S2,sy=Math.random()*S2; x.beginPath(); x.moveTo(sx,sy); x.lineTo(sx+(Math.random()-.5)*80,sy+(Math.random()-.5)*8); x.stroke(); } }
+  else { x.strokeStyle='rgba(0,0,0,.35)'; x.lineWidth=1.2; for(let i=0;i<6;i++){ let px=Math.random()*S2,py=Math.random()*S2; x.beginPath(); x.moveTo(px,py); for(let k=0;k<8;k++){ px+=(Math.random()-.5)*50; py+=Math.random()*30; x.lineTo(px,py); } x.stroke(); } }
+  const t=new T.CanvasTexture(c); t.wrapS=t.wrapT=T.RepeatWrapping; t.repeat.set(rx,ry); try{ t.anisotropy=R.capabilities.getMaxAnisotropy(); }catch(e){} return t; }
+function gfxDetail(th){ try{
+  const soft=gfxSoft(), acc=th.acc||0x88ccff, dome=!!th.dome, lau=!!th.launcher;
+  const mat=(c,o)=>new T.MeshStandardMaterial(Object.assign({color:c,roughness:.55,metalness:.6},o||{}));
+  if(!dome&&!lau){
+    [-2.4,0,2.4].forEach(z=>{ const p=new T.Mesh(new T.CylinderGeometry(.07,.07,9.6,10),mat(th.pipe||0x555555)); p.rotation.z=Math.PI/2; p.position.set(0,3.8,z); S.add(p); for(let k=-4;k<=4;k+=2){ const cl=new T.Mesh(new T.CylinderGeometry(.1,.1,.07,10),mat(0x1a1a1a)); cl.rotation.z=Math.PI/2; cl.position.set(k,3.8,z); S.add(cl); } });
+    for(let i=0;i<6;i++){ const x0=-3.5+i*1.4, pts=[new T.Vector3(x0,3.9,-3.3),new T.Vector3(x0+.35,3.1,-3.25),new T.Vector3(x0-.25,2.4,-3.3)]; S.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),16,.03,6),mat(0x151515,{metalness:.2,roughness:.7}))); }
+    const bb=new T.Mesh(new T.BoxGeometry(9.8,.25,.12),mat(0x222222)); bb.position.set(0,.13,-3.44); S.add(bb);
+    [-3.9,3.9].forEach(x=>{ const v=new T.Mesh(new T.BoxGeometry(.9,.6,.06),mat(0x2a2a2a)); v.position.set(x,1.0,-3.47); S.add(v); for(let k=0;k<5;k++){ const sl=new T.Mesh(new T.BoxGeometry(.8,.03,.04),mat(0x0a0a0a)); sl.position.set(x,.82+k*.09,-3.43); S.add(sl); } });
+    const rv=new T.InstancedMesh(new T.CylinderGeometry(.025,.025,.03,6),mat(0x888888),60), dm=new T.Object3D(); for(let i=0;i<60;i++){ dm.position.set(-4.4+i*.15,3.62,-3.46); dm.rotation.x=Math.PI/2; dm.updateMatrix(); rv.setMatrixAt(i,dm.matrix); } S.add(rv);
+    const fl=new T.Mesh(new T.PlaneGeometry(9.6,7.6),new T.MeshStandardMaterial({map:gfxGrate(),transparent:true,alphaTest:.3,color:0x888888,roughness:.5,metalness:.8,side:T.DoubleSide})); fl.rotation.x=-Math.PI/2; fl.position.set(0,.02,.5); S.add(fl);
+    const bc=th.bulb||0xffe0a8, bulb=new T.Mesh(new T.SphereGeometry(.12,12,12),new T.MeshBasicMaterial({color:bc})); bulb.position.set(0,3.55,-1.0); S.add(bulb);
+    const cage=new T.Mesh(new T.CylinderGeometry(.2,.2,.4,8,1,true),new T.MeshBasicMaterial({color:0x111111,wireframe:true})); cage.position.copy(bulb.position); S.add(cage);
+    const bl=new T.PointLight(bc,.6,9); bl.position.copy(bulb.position); S.add(bl); GFX.bl=bl;
+    const sh=new T.Mesh(new T.ConeGeometry(1.5,2.4,24,1,true),new T.MeshBasicMaterial({color:bc,transparent:true,opacity:.05,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide})); sh.position.set(0,2.35,-1.0); S.add(sh);
+    const gl=new T.Sprite(new T.SpriteMaterial({map:soft,color:bc,blending:T.AdditiveBlending,depthWrite:false,opacity:.8})); gl.scale.set(1.6,1.6,1); gl.position.copy(bulb.position); S.add(gl);
+  }
+  if(dome){ const ring=new T.Mesh(new T.RingGeometry(3.0,3.12,64),new T.MeshBasicMaterial({color:acc,side:T.DoubleSide,transparent:true,opacity:.8})); ring.rotation.x=-Math.PI/2; ring.position.set(0,.03,.5); S.add(ring); const r2=ring.clone(); r2.scale.setScalar(1.4); S.add(r2);
+    for(let i=0;i<14;i++){ const a=i/14*6.283, r=5.6+Math.random()*.6, cr=new T.Mesh(new T.OctahedronGeometry(.25+Math.random()*.35),new T.MeshStandardMaterial({color:0x99ccee,emissive:acc,emissiveIntensity:.5,roughness:.15,metalness:.2,transparent:true,opacity:.85})); cr.position.set(Math.cos(a)*r,.3,.5+Math.sin(a)*r); cr.scale.y=1.8+Math.random()*1.5; cr.rotation.y=Math.random()*3; S.add(cr); } }
+  const hz=[]; for(let i=0;i<14;i++){ const sp=new T.Sprite(new T.SpriteMaterial({map:soft,color:th.haze||0x667788,transparent:true,opacity:.06+Math.random()*.04,blending:T.AdditiveBlending,depthWrite:false})); const sc=3+Math.random()*3; sp.scale.set(sc,sc*.6,1); sp.position.set((Math.random()-.5)*8,.4+Math.random()*2.4,(Math.random()-.5)*7+.5); sp.userData.v=(Math.random()-.5)*.15; S.add(sp); hz.push(sp); }
+  const n=260, pa=new Float32Array(n*3), pv=new Float32Array(n), R0=dome?5.5:4.4; for(let i=0;i<n;i++){ pa[i*3]=(Math.random()-.5)*2*R0; pa[i*3+1]=Math.random()*3.8; pa[i*3+2]=(Math.random()-.5)*(dome?2*R0:7)+.5; pv[i]=.2+Math.random(); }
+  const pg=new T.BufferGeometry(); pg.setAttribute('position',new T.BufferAttribute(pa,3)); const kind=th.p||'dust';
+  S.add(new T.Points(pg,new T.PointsMaterial({map:soft,size:kind==='snow'?.1:kind==='embers'?.07:.06,transparent:true,opacity:.75,depthWrite:false,blending:T.AdditiveBlending,color:th.pc||0xffeedd})));
+  let tm=0; GFX.tick=dt=>{ tm+=dt; hz.forEach(s=>{ s.position.x+=s.userData.v*dt; if(Math.abs(s.position.x)>5) s.userData.v*=-1; });
+    for(let i=0;i<n;i++){ const k=i*3; if(kind==='bubbles'){ pa[k+1]+=pv[i]*dt*.5; pa[k]+=Math.sin(tm+i)*dt*.1; if(pa[k+1]>3.9) pa[k+1]=0; } else if(kind==='snow'){ pa[k+1]-=pv[i]*dt*.35; pa[k]+=Math.sin(tm*.7+i)*dt*.15; if(pa[k+1]<0) pa[k+1]=3.9; } else if(kind==='embers'){ pa[k+1]+=pv[i]*dt*.8; pa[k]+=Math.sin(tm*2+i)*dt*.2; if(pa[k+1]>3.9) pa[k+1]=0; } else { pa[k]+=Math.sin(tm*.3+i)*dt*.05; pa[k+1]+=Math.cos(tm*.25+i*1.3)*dt*.04; } }
+    pg.attributes.position.needsUpdate=true; if(GFX.bl) GFX.bl.intensity=.55+Math.sin(tm*13)*.05+(Math.random()<.02?-.3:0); };
+ }catch(e){ GFX.tick=null; } }
+
+function gfxInit(sx,sy,sz,tx,ty,tz){ try {
+  if(sx===undefined){ sx=0; sy=3.6; sz=2.2; tx=0; ty=.9; tz=-.6; }
+  const nc=document.createElement('canvas'); nc.width=nc.height=128; const nx=nc.getContext('2d'), im=nx.createImageData(128,128);
+  for(let i=0;i<im.data.length;i+=4){ const v=110+Math.random()*90|0; im.data[i]=im.data[i+1]=im.data[i+2]=v; im.data[i+3]=255; } nx.putImageData(im,0,0);
+  const noise=new T.CanvasTexture(nc); noise.wrapS=noise.wrapT=T.RepeatWrapping; noise.repeat.set(3,3);
+  const pm=new T.PMREMGenerator(R), es=new T.Scene(); es.background=new T.Color(0x04070a);
+  [[0xffd8b0,0,5,-4,4],[0x90b8ff,-5,2,3,3],[0xffffff,5,3,3,3],[0x60ffd0,0,-1,4,2]].forEach(a=>{ const m=new T.Mesh(new T.BoxGeometry(a[4],.8,.1),new T.MeshBasicMaterial({color:a[0]})); m.position.set(a[1],a[2],a[3]); m.lookAt(0,0,0); es.add(m); });
+  S.environment=pm.fromScene(es,.03).texture; pm.dispose(); GFX.tw=gfxTex((GFX.theme&&GFX.theme.wall)||'concrete',3,2); GFX.tp=gfxTex((GFX.theme&&GFX.theme.prop)||'metal',1,1); gfxDetail(GFX.theme||{});
+  R.shadowMap.enabled=true; R.shadowMap.type=T.PCFSoftShadowMap;
+  const sp=new T.SpotLight(0xffe2b8,1.1,18,.9,.65,1); sp.position.set(sx,sy,sz); sp.target.position.set(tx,ty,tz); sp.castShadow=true; sp.shadow.mapSize.set(1024,1024); sp.shadow.bias=-.0004; sp.shadow.normalBias=.03; sp.shadow.camera.near=.5; sp.shadow.camera.far=16; S.add(sp,sp.target);
+  const an=R.capabilities.getMaxAnisotropy();
+  S.traverse(o=>{ if(!o.isMesh) return; const m=o.material; if(!m) return; if(m.isMeshStandardMaterial){ if(m.side!==T.BackSide) o.castShadow=true; o.receiveShadow=true; m.envMapIntensity=.8; if(!m.map){ const rm=m.side===T.BackSide; m.map=rm?GFX.tw:GFX.tp; m.roughnessMap=m.map; m.bumpMap=m.map; m.bumpScale=rm?1.4:.9; } m.needsUpdate=true; } if(m.map) m.map.anisotropy=an; });
+  GFX.v=new T.Vector2(); R.getDrawingBufferSize(GFX.v);
+  try{ if(T.EffectComposer&&T.RenderPass&&T.UnrealBloomPass&&T.ShaderPass&&T.RGBShiftShader&&T.VignetteShader&&T.FilmPass){
+    const o0={minFilter:T.LinearFilter,magFilter:T.LinearFilter,format:T.RGBAFormat};
+    const rt0=(R.capabilities.isWebGL2&&T.WebGLMultisampleRenderTarget)?new T.WebGLMultisampleRenderTarget(GFX.v.x,GFX.v.y,o0):new T.WebGLRenderTarget(GFX.v.x,GFX.v.y,o0);
+    if(R.capabilities.isWebGL2&&rt0.samples!==undefined) rt0.samples=4;
+    const cp=GFX.comp=new T.EffectComposer(R,rt0); cp.addPass(new T.RenderPass(S,Cam));
+    cp.addPass(new T.UnrealBloomPass(new T.Vector2(GFX.v.x,GFX.v.y),.8,.55,.6));
+    const rg=new T.ShaderPass(T.RGBShiftShader); rg.uniforms.amount.value=.0011; cp.addPass(rg);
+    GFX.sp=new T.ShaderPass({uniforms:{tDiffuse:{value:null},amt:{value:0},time:{value:0}},vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'uniform sampler2D tDiffuse;uniform float amt,time;varying vec2 vUv;float hh(float x){return fract(sin(x*91.345+time)*47453.5453);}void main(){vec2 uv=vUv;float row=floor(uv.y*30.);float tear=step(.85,hh(row))*amt*.08;uv.x+=tear*(hh(row+1.)-.5)*2.;vec2 c=uv-.5;uv=.5+c*(1.-amt*.25);float s=amt*.03;vec4 col=vec4(texture2D(tDiffuse,uv+vec2(s,0.)).r,texture2D(tDiffuse,uv).g,texture2D(tDiffuse,uv-vec2(s,0.)).b,1.);col.rgb=mix(col.rgb,vec3(1.)-col.rgb,step(.5,hh(floor(time*30.)))*step(.6,amt)*.5);col.r+=amt*.3;gl_FragColor=col;}'}); cp.addPass(GFX.sp);
+    cp.addPass(new T.FilmPass(.3,.15,700,false));
+    const vg=new T.ShaderPass(T.VignetteShader); vg.uniforms.offset.value=1.0; vg.uniforms.darkness.value=1.2; cp.addPass(vg);
+    cp.setSize(GFX.v.x,GFX.v.y); GFX.sz=GFX.v.clone(); GFX.on=true; return; } }catch(e){ GFX.comp=null; }
+  const w=GFX.v.x, h=GFX.v.y, o={minFilter:T.LinearFilter,magFilter:T.LinearFilter,format:T.RGBAFormat};
+  if(R.capabilities.isWebGL2&&T.WebGLMultisampleRenderTarget){ GFX.rt=new T.WebGLMultisampleRenderTarget(w,h,o); GFX.rt.samples=4; } else GFX.rt=new T.WebGLRenderTarget(w,h,o);
+  GFX.a=new T.WebGLRenderTarget(w>>2,h>>2,Object.assign({depthBuffer:false},o)); GFX.b=new T.WebGLRenderTarget(w>>2,h>>2,Object.assign({depthBuffer:false},o)); GFX.sz=GFX.v.clone();
+  const vs='varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}';
+  const sh=(u,f)=>new T.ShaderMaterial({uniforms:u,vertexShader:vs,fragmentShader:f,depthTest:false,depthWrite:false});
+  GFX.mBright=sh({t:{value:null}},'varying vec2 vUv;uniform sampler2D t;void main(){vec4 c=texture2D(t,vUv);float l=dot(c.rgb,vec3(.299,.587,.114));gl_FragColor=vec4(c.rgb*smoothstep(.45,.9,l),1.);}');
+  GFX.mBlur=sh({t:{value:null},d:{value:new T.Vector2()}},'varying vec2 vUv;uniform sampler2D t;uniform vec2 d;void main(){vec4 s=texture2D(t,vUv)*.227027;s+=(texture2D(t,vUv+d*1.3846)+texture2D(t,vUv-d*1.3846))*.316216;s+=(texture2D(t,vUv+d*3.2308)+texture2D(t,vUv-d*3.2308))*.070270;gl_FragColor=s;}');
+  GFX.mComp=sh({t:{value:null},b:{value:null},time:{value:0}},'varying vec2 vUv;uniform sampler2D t,b;uniform float time;float hh(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233))+time)*43758.5453);}vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}void main(){vec2 c=vUv-.5;float r=dot(c,c);vec2 off=c*r*.012;vec3 col=vec3(texture2D(t,vUv+off).r,texture2D(t,vUv).g,texture2D(t,vUv-off).b);col+=texture2D(b,vUv).rgb*.85;col=mix(col,aces(col*1.15),.55);col*=1.-r*1.1;col+=(hh(vUv*1000.)-.5)*.045;gl_FragColor=vec4(col,1.);}');
+  GFX.qs=new T.Scene(); GFX.qc=new T.OrthographicCamera(-1,1,1,-1,0,1); GFX.q=new T.Mesh(new T.PlaneGeometry(2,2),GFX.mBright); GFX.q.frustumCulled=false; GFX.qs.add(GFX.q);
+  GFX.on=true;
+} catch(e){ GFX.on=false; } }
+function gfxRender(){
+  if(!GFX.on||(typeof hiQ!=='undefined'&&!hiQ)){ R.setRenderTarget(null); R.render(S,Cam); return; }
+  if(GFX.comp){ try{ R.getDrawingBufferSize(GFX.v); const v=GFX.v; if(v.x!==GFX.sz.x||v.y!==GFX.sz.y){ GFX.comp.setSize(v.x,v.y); GFX.sz.copy(v); } const now=performance.now(), dt=Math.min(.1,(now-(GFX.lt||now))/1000); GFX.lt=now; if(GFX.tick) GFX.tick(dt); GFX.sp.uniforms.amt.value=GFX.scareAmt||0; GFX.sp.uniforms.time.value=(now%1000)/1000; GFX.comp.render(dt); }catch(e){ GFX.comp=null; GFX.on=false; R.setRenderTarget(null); R.render(S,Cam); } return; }
+  try {
+    R.getDrawingBufferSize(GFX.v); const v=GFX.v; if(v.x!==GFX.sz.x||v.y!==GFX.sz.y){ GFX.rt.setSize(v.x,v.y); GFX.a.setSize(v.x>>2,v.y>>2); GFX.b.setSize(v.x>>2,v.y>>2); GFX.sz.copy(v); }
+    R.setRenderTarget(GFX.rt); R.render(S,Cam);
+    const pass=(m,src,dst)=>{ GFX.q.material=m; m.uniforms.t.value=src; R.setRenderTarget(dst); R.render(GFX.qs,GFX.qc); };
+    pass(GFX.mBright,GFX.rt.texture,GFX.a);
+    for(let i=0;i<2;i++){ GFX.mBlur.uniforms.d.value.set(1/GFX.a.width,0); pass(GFX.mBlur,GFX.a.texture,GFX.b); GFX.mBlur.uniforms.d.value.set(0,1/GFX.a.height); pass(GFX.mBlur,GFX.b.texture,GFX.a); }
+    GFX.mComp.uniforms.b.value=GFX.a.texture; GFX.mComp.uniforms.time.value=(performance.now()%1000)/1000; pass(GFX.mComp,GFX.rt.texture,null);
+  } catch(e){ GFX.on=false; R.setRenderTarget(null); R.render(S,Cam); }
+}
+
+/* ---------- three.js ---------- */
+const T = window.THREE; let R, S, Cam, sTex, sc, knob, crtL, dust, ready = false, pos = 1, sw = 0, knobA = 0, mx = 0, my = 0, last = 0, tt = 0, drawT = 0, fov = 52;
+const picks = [], btns = [], leds = [], reels = [];
+function box(w,h,d,col,x,y,z,em){ const m=new T.Mesh(new T.BoxGeometry(w,h,d),new T.MeshStandardMaterial({color:col,roughness:.65,metalness:.35,emissive:em||0})); m.position.set(x,y,z); S.add(m); return m; }
+function label(txt,x,y,z,col){ const c=document.createElement('canvas'); c.width=96; c.height=32; const x2=c.getContext('2d'); x2.fillStyle='#000'; x2.fillRect(0,0,96,32); x2.fillStyle=col; x2.font='bold 18px monospace'; x2.textAlign='center'; x2.fillText(txt,48,23); const t=new T.CanvasTexture(c); const m=new T.Mesh(new T.PlaneGeometry(.3,.1),new T.MeshBasicMaterial({map:t})); m.position.set(x,y,z); m.rotation.x=-1.1; S.add(m); }
+function build(){
+  S=new T.Scene(); S.background=new T.Color(0x020406); S.fog=new T.FogExp2(0x020406,.045);
+  Cam=new T.PerspectiveCamera(fov,innerWidth/innerHeight,.1,60); R=new T.WebGLRenderer({canvas:$('c'),antialias:true}); R.setPixelRatio(Math.min(devicePixelRatio||1,2)); R.setSize(innerWidth,innerHeight,false);
+  S.add(new T.AmbientLight(0x2a3844,1.2));
+  const lamp=new T.PointLight(0xffa850,.9,12); lamp.position.set(-2.2,3,3); S.add(lamp);
+  crtL=new T.PointLight(0x7dffa1,1.4,10); crtL.position.set(0,2.2,3.2); S.add(crtL);
+  const wall=box(16,8,.2,0x1a242c,0,3.5,-1.6); const fl=box(16,.2,12,0x0e1216,0,-.1,3);
+  for(let i=-3;i<=3;i++) box(.04,6,.05,0x2a3a46,i*2.2,3.2,-1.48);
+  box(7.4,.14,3.6,0x3a2c20,0,.78,1.6); box(7.0,.8,3.2,0x16110c,0,.38,1.6);
+  box(3.2,2.4,1.9,0x3d2c1e,0,1.98,.3); box(2.8,2.0,.4,0x2a1e14,0,2.0,1.3);
+  [[0,3.12,2.5,.12],[0,.97,2.5,.12],[-1.28,2.05,.12,1.9],[1.28,2.05,.12,1.9]].forEach(([x,y,w,h])=>box(w===2.5?2.6:w,h===.12?.14:h,.08,0x1a120a,x,y,1.5));
+  [[-.5,.4],[.5,-.4]].forEach(([x,r])=>{ const e=new T.Mesh(new T.CylinderGeometry(.015,.015,1.4,6),new T.MeshStandardMaterial({color:0xaaaaaa,metalness:.9})); e.position.set(x*.5,3.8,.3); e.rotation.z=r; S.add(e); });
+  sc={c:document.createElement('canvas')}; sc.c.width=512; sc.c.height=384; sc.x=sc.c.getContext('2d'); sTex=new T.CanvasTexture(sc.c);
+  const g=new T.PlaneGeometry(2.3,1.75,16,12), p=g.attributes.position; for(let i=0;i<p.count;i++){ const x=p.getX(i),y=p.getY(i); p.setZ(i,.1-(x*x*.05+y*y*.07)); }
+  const scr=new T.Mesh(g,new T.MeshBasicMaterial({map:sTex})); scr.position.set(0,2.05,1.5); S.add(scr);
+  const gl=new T.Mesh(new T.PlaneGeometry(2.3,1.75),new T.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.05})); gl.position.set(0,2.05,1.6); S.add(gl);
+  [-1,1].forEach(d=>{ box(1.3,3.1,1.1,0x151b20,d*3.5,1.55,.2); for(let r=0;r<8;r++) box(1.15,.04,.02,0x2a3640,d*3.5,.5+r*.36,.76);
+    for(let r=0;r<8;r++) for(let c=0;c<4;c++){ const l=box(.07,.05,.02,0x113311,d*3.5-.4+c*.18,.68+r*.36,.77,0x00aa33); l.userData.s=Math.random()*10; leds.push(l); }
+    [-.3,.3].forEach(o=>{ const gg=new T.CylinderGeometry(.42,.42,.05,28); gg.rotateX(Math.PI/2); const rl=new T.Mesh(gg,new T.MeshStandardMaterial({color:0xb4b4b4,metalness:.85,roughness:.3})); rl.position.set(d*3.5+o,3.45,.8); rl.userData.d=d; S.add(rl); reels.push(rl); const hub=new T.Mesh(new T.CylinderGeometry(.08,.08,.08,10),new T.MeshStandardMaterial({color:0x333333})); hub.rotation.x=Math.PI/2; hub.position.copy(rl.position); S.add(hub); }); });
+  knob=new T.Group(); const kb=new T.Mesh(new T.CylinderGeometry(.26,.3,.16,24),new T.MeshStandardMaterial({color:0x222222,metalness:.8,roughness:.3})); kb.rotation.x=Math.PI/2; knob.add(kb); const ki=new T.Mesh(new T.BoxGeometry(.05,.22,.06),new T.MeshStandardMaterial({color:0xff4444,emissive:0x550000})); ki.position.set(0,.14,.1); knob.add(ki); knob.position.set(1.9,1.35,2.5); knob.userData.a='knob'; kb.userData.a='knob'; S.add(knob); picks.push(kb);
+  label('TUNE',1.9,.9,2.4,'#fc6');
+  for(let i=0;i<7;i++){ const b=box(.34,.12,.3,i?0x2a3a30:0x3a2030,-1.6+i*.5,.9,2.55); b.userData.a='ch'; b.userData.i=i; btns.push(b); picks.push(b); label('CH-0'+i,-1.6+i*.5,.9,2.78,CH[i].col); }
+  const gp=new T.BufferGeometry(), arr=new Float32Array(200*3); for(let i=0;i<arr.length;i+=3){ arr[i]=(Math.random()-.5)*14; arr[i+1]=Math.random()*5; arr[i+2]=Math.random()*8-1; } gp.setAttribute('position',new T.BufferAttribute(arr,3)); dust=new T.Points(gp,new T.PointsMaterial({color:0xffeedd,size:.03,transparent:true,opacity:.5})); S.add(dust);
+  ready=true;
+}
+
+/* ---------- CRT preview ---------- */
+const W=512, H=384;
+function omegaUnlocked(){ return IDS6.every(i=>(SV.nightsCompleted[i]||0)>=5); }
+function bossDone(){ return (SV.nightsCompleted.slobs0||0)>=1; }
+function scene(c,t,x){
+  x.fillStyle='#02050a'; x.fillRect(0,0,W,H);
+  if(c===1){ if(Math.sin(t*1.3)>.96||Math.sin(t*.7+2)>.98){ x.fillStyle='rgba(190,210,255,.4)'; x.fillRect(0,0,W,H); }
+    x.fillStyle='#0a1014'; x.beginPath(); x.moveTo(0,300); x.lineTo(140,210); x.lineTo(250,262); x.lineTo(380,180); x.lineTo(512,290); x.lineTo(512,384); x.lineTo(0,384); x.fill();
+    x.strokeStyle='#7dffa1'; x.lineWidth=2; x.beginPath(); x.moveTo(380,180); x.lineTo(380,95); x.moveTo(364,180); x.lineTo(380,105); x.lineTo(396,180); x.stroke(); x.fillStyle=Math.sin(t*5)>0?'#f33':'#400'; x.beginPath(); x.arc(380,92,4,0,7); x.fill();
+    x.strokeStyle='rgba(150,190,220,.3)'; for(let i=0;i<40;i++){ const rx=(i*53+t*60)%W,ry=(i*37+t*400)%H; x.beginPath(); x.moveTo(rx,ry); x.lineTo(rx-3,ry+12); x.stroke(); }
+    x.strokeStyle='#7dffa1'; x.beginPath(); for(let i=0;i<W;i+=4){ const y=340+Math.sin(i*.05+t*6)*12; i?x.lineTo(i,y):x.moveTo(i,y); } x.stroke(); }
+  else if(c===2){ const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,'#00131f'); g.addColorStop(1,'#000'); x.fillStyle=g; x.fillRect(0,0,W,H);
+    x.strokeStyle='#0c4a5a'; [50,100,150].forEach(r=>{ x.beginPath(); x.arc(256,200,r,0,7); x.stroke(); }); const a=t*2; x.strokeStyle='rgba(111,232,255,.7)'; x.lineWidth=2; x.beginPath(); x.moveTo(256,200); x.lineTo(256+Math.cos(a)*150,200+Math.sin(a)*150); x.stroke();
+    const pr=(t*60)%200; x.strokeStyle='rgba(255,255,255,'+(1-pr/200)+')'; x.beginPath(); x.arc(256,200,pr,0,7); x.stroke(); x.fillStyle='rgba(70,255,220,.7)'; for(let i=0;i<30;i++){ x.beginPath(); x.arc((i*97)%W+Math.sin(t+i)*8,H-((t*30+i*61)%H),1.8,0,7); x.fill(); }
+    x.fillStyle='#000'; x.beginPath(); x.ellipse(110+Math.sin(t*.3)*30,90,70,28,0,0,7); x.fill(); x.fillStyle='rgba(120,255,255,.8)'; x.fillRect(60+Math.sin(t*.3)*30,86,8,6); x.fillRect(82+Math.sin(t*.3)*30,86,8,6); }
+  else if(c===3){ x.fillStyle='#fff'; for(let i=0;i<60;i++){ x.globalAlpha=.4+.6*Math.abs(Math.sin(t+i)); x.fillRect((i*83)%W,(i*47)%250,1.5,1.5); } x.globalAlpha=1;
+    const g=x.createRadialGradient(256,520,200,256,520,340); g.addColorStop(0,'#0a2a6a'); g.addColorStop(.9,'#2a6ac0'); g.addColorStop(1,'#8ac4ff'); x.fillStyle=g; x.beginPath(); x.arc(256,520,340,0,7); x.fill();
+    x.save(); x.translate(256+Math.cos(t*.4)*120,150+Math.sin(t*.4)*30); x.fillStyle='#ccc'; x.fillRect(-18,-8,36,16); x.fillStyle='#48a'; x.fillRect(-58,-5,36,10); x.fillRect(22,-5,36,10); x.strokeStyle='#fc6'; x.beginPath(); x.arc(0,-10,12,Math.PI,0); x.stroke(); x.restore();
+    x.strokeStyle='rgba(255,140,40,.8)'; x.lineWidth=3; x.beginPath(); for(let i=0;i<W;i+=6){ const y=60+Math.sin(i*.03+t*3)*14; i?x.lineTo(i,y):x.moveTo(i,y); } x.stroke(); }
+  else if(c===4){ x.fillStyle='#120a02'; x.fillRect(0,0,W,H); [[170,200],[342,200]].forEach(([cx,cy],k)=>{ x.strokeStyle='#ffb347'; x.lineWidth=3; x.beginPath(); x.arc(cx,cy,72,0,7); x.stroke(); for(let s=0;s<6;s++){ const a=t*(k?-3:3)+s*1.047; x.beginPath(); x.moveTo(cx,cy); x.lineTo(cx+Math.cos(a)*72,cy+Math.sin(a)*72); x.stroke(); } });
+    x.strokeStyle='#6a4318'; x.beginPath(); x.moveTo(170,272); x.lineTo(256,310); x.lineTo(342,272); x.stroke(); for(let i=0;i<6;i++){ x.fillStyle='rgba(255,170,50,'+(.5+.4*Math.sin(t*3+i))+')'; x.fillRect(110+i*55,40,16,36); }
+    x.strokeStyle='#ffb347'; x.beginPath(); x.arc(256,345,26,0,7); x.stroke(); }
+  else if(c===5){ for(let b=0;b<3;b++){ x.strokeStyle=['rgba(80,255,170,.5)','rgba(150,90,255,.45)','rgba(60,220,255,.4)'][b]; x.lineWidth=18+b*4; x.beginPath(); for(let i=0;i<=W;i+=8){ const y=90+b*26+Math.sin(i*.02+t*.7+b*2)*26; i?x.lineTo(i,y):x.moveTo(i,y); } x.stroke(); }
+    x.fillStyle='#b8ccd8'; x.fillRect(0,300,W,84); x.strokeStyle='rgba(220,240,255,.7)'; x.lineWidth=2; x.beginPath(); x.ellipse(256,300,200,170,0,Math.PI,0); x.stroke(); for(let i=1;i<6;i++){ x.beginPath(); x.moveTo(56+i*66,300); x.lineTo(256,130); x.stroke(); }
+    x.fillStyle='rgba(255,50,150,'+(.15+.15*Math.sin(t*2))+')'; x.fillRect(0,0,W,300); }
+  else if(c===6){ const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,'#03060c'); g.addColorStop(.6,'#0c1a24'); g.addColorStop(1,'#02080c'); x.fillStyle=g; x.fillRect(0,0,W,H); x.fillStyle='#fff'; for(let i=0;i<40;i++){ x.globalAlpha=.3+.5*Math.abs(Math.sin(t+i)); x.fillRect((i*89)%W,(i*41)%170,1.5,1.5); } x.globalAlpha=1;
+    const a=t*.7; x.fillStyle='rgba(255,230,150,.22)'; x.beginPath(); x.moveTo(380,150); x.lineTo(380+Math.cos(a-.12)*420,150+Math.sin(a-.12)*60); x.lineTo(380+Math.cos(a+.12)*420,150+Math.sin(a+.12)*60); x.fill();
+    x.strokeStyle='rgba(120,170,190,.4)'; for(let r=0;r<8;r++){ x.beginPath(); for(let i=0;i<=W;i+=8){ const y=250+r*16+Math.sin(i*.04+t*1.4+r)*4; i?x.lineTo(i,y):x.moveTo(i,y); } x.stroke(); }
+    x.fillStyle='#10161a'; x.beginPath(); x.moveTo(360,330); x.lineTo(372,160); x.lineTo(388,160); x.lineTo(400,330); x.fill(); x.fillStyle='#ffd98a'; x.fillRect(372,146,16,14); x.fillStyle='rgba(255,255,255,.07)'; for(let i=0;i<4;i++) x.fillRect(((t*20+i*140)%W+W)%W-80,200+i*30,160,18); }
+  else { const un=omegaUnlocked(), pu=.5+.5*Math.sin(t*3); x.fillStyle='#08020a'; x.fillRect(0,0,W,H);
+    for(let b=0;b<3;b++){ x.strokeStyle='rgba(255,'+(60+b*40)+',140,.4)'; x.lineWidth=16; x.beginPath(); for(let i=0;i<=W;i+=8){ const y=70+b*24+Math.sin(i*.02+t+b)*24; i?x.lineTo(i,y):x.moveTo(i,y); } x.stroke(); }
+    x.fillStyle='#14081a'; x.beginPath(); x.moveTo(256,130); x.lineTo(196,350); x.lineTo(316,350); x.fill(); x.fillStyle='#d8d0c8'; x.beginPath(); x.arc(256,120+Math.sin(t)*4,28,0,7); x.fill();
+    x.strokeStyle='rgba(255,90,160,'+(.5+pu*.5)+')'; x.lineWidth=3; x.beginPath(); x.ellipse(256,200,150,40,t*.3,0,7); x.stroke(); x.fillStyle='#ff2277'; [-12,12].forEach(d=>{ x.beginPath(); x.arc(256+d,116,4,0,7); x.fill(); });
+    x.textAlign='center'; x.font='bold 20px monospace'; if(un){ x.fillStyle='#ff5aa0'; x.fillText(bossDone()?'ARCHITECT DEFEATED - TRUE ENDING READY':'MAX LEVEL // THE ARCHITECT',256,372); } else { x.fillStyle='rgba(0,0,0,.6)'; x.fillRect(0,0,W,H); x.fillStyle='#f55'; x.fillText('LOCKED // FINISH ALL 6 CHAPTERS',256,210); } x.textAlign='left'; }
+}
+function drawScreen(t){
+  const x=sc.x; scene(pos,t,x);
+  for(let i=0;i<150;i++){ x.fillStyle='rgba(255,255,255,'+Math.random()*.12+')'; x.fillRect(Math.random()*W,Math.random()*H,1+Math.random()*3,1); }
+  const by=(t*90)%(H+80)-40; x.fillStyle='rgba(255,255,255,.04)'; x.fillRect(0,by,W,40);
+  x.fillStyle='rgba(0,0,0,.18)'; for(let y=0;y<H;y+=3) x.fillRect(0,y,W,1);
+  const v=x.createRadialGradient(256,192,120,256,192,330); v.addColorStop(0,'rgba(0,0,0,0)'); v.addColorStop(1,'rgba(0,0,0,.65)'); x.fillStyle=v; x.fillRect(0,0,W,H);
+  const col=CH[pos].col; x.fillStyle=col; x.font='bold 28px monospace'; x.fillText('CH-0'+pos,22,44); x.font='14px monospace'; x.fillText(Math.floor(t*2)%2?'\u25B6 PLAY':'\u25B6',24,66); x.textAlign='right'; x.fillText(String(CH[pos].year),W-22,38); x.textAlign='left';
+  if(sw>0){ x.fillStyle='rgba(255,255,255,'+sw*.6+')'; x.fillRect(0,0,W,H); for(let i=0;i<500;i++){ x.fillStyle='rgba(0,0,0,'+Math.random()+')'; x.fillRect(Math.random()*W,Math.random()*H,6,2); } const y=H/2; x.fillStyle='rgba(255,255,255,'+sw+')'; x.fillRect(0,y-(1-sw)*H/2,W,Math.max(2,(1-(1-sw))*H*sw)); }
+  sTex.needsUpdate=true;
+}
+function frame(now){ requestAnimationFrame(frame); const dt=Math.min((now-last)/1000||0,.1); last=now; tt+=dt; sw=Math.max(0,sw-dt*2.2);
+  if(!ready) return;
+  drawT+=dt; if(drawT>.033){ drawT=0; drawScreen(tt); }
+  leds.forEach(l=>{ const on=Math.sin(tt*(2+l.userData.s%4)+l.userData.s*7)>.35; l.material.emissiveIntensity=on?1.4:.1; l.material.emissive.setHex(l.userData.s>8?0xff2200:l.userData.s>5?0xffaa00:0x00cc44); });
+  reels.forEach(r=>{ r.rotation.z+=dt*2*r.userData.d; });
+  const ta=-2.2+pos*.733; knobA+=(ta-knobA)*Math.min(1,dt*10); knob.rotation.z=-knobA;
+  btns.forEach((b,i)=>{ const a=i===pos; b.position.y+=((a?.84:.9)-b.position.y)*.3; b.material.emissive.setHex(a?parseInt(CH[i].col.slice(1),16):0); b.material.emissiveIntensity=a?.9:0; });
+  const cc=new T.Color(CH[pos].col); crtL.color.lerp(cc,.1); crtL.intensity=1.1+Math.random()*.3+sw*2;
+  const asp=innerWidth/innerHeight; Cam.position.set(mx*.5+Math.sin(tt*.2)*.1,2.0+my*.2,6.4+Math.max(0,1.5-asp)*4); Cam.lookAt(mx*.2,1.75,0); Cam.fov=fov-sw*3; Cam.updateProjectionMatrix();
+  dust.rotation.y+=dt*.01;
+  try{ gfxRender(); }catch(e){}
+}
+
+/* ---------- info panel ---------- */
+function toast(m,ms){ const t=$('toast'); t.textContent=m; t.style.display='block'; clearTimeout(toast.h); toast.h=setTimeout(()=>{ t.style.display='none'; },ms||5000); }
+function renderInfo(){ const ch=CH[pos], el=$('info'); el.className=''; document.documentElement.style.setProperty('--c',ch.col); let h='';
+  if(pos===0){ const un=omegaUnlocked(), bd=bossDone(), rdy=IDS6.filter(i=>(SV.nightsCompleted[i]||0)>=5).length; el.className='boss';
+    h='<div class="tag">CH-00 &bull; MAX LEVEL &bull; FINAL BOSS</div><h2>OMEGA: THE ARCHITECT</h2><p>The last broadcast. The Architect throws the signature threat of every chapter at you at once, across three phases. Drain its Loop Integrity before 6:00 AM.</p>'+
+     '<div class="pips">'+IDS6.map(i=>'<i class="'+((SV.nightsCompleted[i]||0)>=5?'f':'')+'"></i>').join('')+'</div><div class="nights">'+rdy+' / 6 CHAPTERS SURVIVED</div>'+
+     (un?(bd?'<span class="badge g">&#9733; ARCHITECT DEFEATED</span>'+((IDS6.every(i=>SV.custom420Cleared[i])&&bossDone())?'<span class="badge g">ARCHITECT TRANSCRIPT UNLOCKED</span>':'')+'<button class="big" id="bGo">WATCH THE TRUE ENDING</button><button class="big" id="bGo2">REMATCH THE ARCHITECT</button>':'<button class="big" id="bGo">ENTER THE BOSS LEVEL</button>'):'<p style="color:#f66">LOCKED. Survive Night 5 in every chapter, including SLOBS Chapter 6, to face the Architect.</p>'); }
+  else { const nc=Math.min(5,SV.nightsCompleted[ch.id]||0), pips=[1,2,3,4,5].map(n=>'<i class="'+(nc>=n?'f':'')+'"></i>').join('');
+    h='<div class="tag">SLOBS CHAPTER '+ch.n+' &bull; '+ch.year+'</div><h2>'+ch.title+'</h2><div class="ac">'+ch.ac+'</div><p>'+ch.who+'</p><p>'+ch.threat+'</p><p style="color:var(--c)">Threats: '+ch.mons.join(' / ')+'</p>'+
+     '<div class="nights">'+nc+' / 5 Nights</div><div class="pips">'+pips+'</div>'+(nc>=5?'<span class="badge">[5 NIGHTS SURVIVED]</span>':'')+(SV.custom420Cleared[ch.id]?'<span class="badge g">&#9733; [4/20 MASTERED]</span>':'')+
+     ((SV.nightsCompleted[ch.id]||0)>=6?'<span class="badge">OVERTIME CLEARED</span>':'')+'<button class="big" id="bGo">TUNE IN / LAUNCH CHAPTER</button>'; }
+  el.innerHTML=h; const b=$('bGo'); if(b) b.onclick=()=>{ if(pos===0){ if(bossDone()) playOmega(); else window.location.href='SLOBS_0.html'; } else window.location.href=ch.file; }; const b2=$('bGo2'); if(b2) b2.onclick=()=>{ window.location.href='SLOBS_0.html'; }; }
+function setPos(p,snd){ p=(p+7)%7; if(p===pos&&!snd) return; pos=p; sw=1; aInit(); click(); noise(.3,.25,4000,'highpass'); if(pos) numbers(); renderInfo(); }
+function refresh(){ SV=load(); renderInfo(); }
+
+/* ---------- lore terminal ---------- */
+let dT=0; function decrypt(el,txt){ clearTimeout(dT); let p=0; const ch='#%&@$*?<>/\\|01';
+  (function f(){ let s=txt.slice(0,p); for(let i=p;i<txt.length;i++) s+=txt[i]===' '||txt[i]==='\n'?txt[i]:ch[Math.random()*ch.length|0]; $('lr').textContent=s; p+=5; if(p<txt.length+5) dT=setTimeout(f,22); else $('lr').textContent=txt; })(); }
+function openLore(){ SV=load(); const ll=$('ll'); ll.innerHTML=''; let got=0,tot=0; const un=new Set(SV.unlockedLogs);
+  ERAS6.forEach(g=>{ const h=document.createElement('h4'); h.textContent=CH[g].year+' - CH-0'+g+' '+CH[g].short; ll.appendChild(h);
+    LORE[g].forEach(e=>{ tot++; if(un.has(e.id)){ got++; const b=document.createElement('button'); b.textContent=e.t; b.onclick=()=>{ click(); decrypt($('lr'),e.t+'\n\n'+e.x); }; ll.appendChild(b); } else { const d=document.createElement('div'); d.className='lk'; d.textContent='[ENCRYPTED] '+e.t.split(' - ')[0]; ll.appendChild(d); } }); });
+  const h=document.createElement('h4'); h.textContent='POST-CREDITS'; ll.appendChild(h); tot++;
+  if((IDS6.every(i=>SV.custom420Cleared[i])&&bossDone())&&omegaUnlocked()){ got++; const b=document.createElement('button'); b.textContent="ARCHITECT'S TRANSCRIPT"; b.onclick=()=>{ click(); decrypt($('lr'),ARCH); }; ll.appendChild(b); } else { const d=document.createElement('div'); d.className='lk'; d.textContent='[ENCRYPTED] Master all five stations at 4/20'; ll.appendChild(d); }
+  $('lsum').textContent='DECRYPTED '+got+' / '+tot+' dossiers. Chronological order: 1974 > 1989 > 2004 > 2029 > 2045.'; $('lr').textContent='Select a decrypted dossier.'; aInit(); show('lore'); }
+
+/* ---------- omega broadcast ---------- */
+const OM = {on:false,t0:0,raf:0,osc:[],tm:0,gains:[]};
+const CAPS = Object.freeze([[0,'1953 - GHOST POINT. The first cause answers its own call.'],[4,'1974 - BUNKER 04. The carrier is sent.'],[8,'1989 - POD-02. The ocean remembers it.'],[12,'2004 - RELAY 01. The mountain repeats it.'],[16,'2029 - AETHER-03. The sky amplifies it.'],[20,'2045 - BOREALIS. The pole answers it.'],[27,'PHASE INVERSION PULSE'],[34,'THE 19.74 Hz LOOP COLLAPSES.'],[39,'THE LOOP NEVER HAPPENED.'],[44,'THE CHORUS IS FREE.']]);
+const CRED = Object.freeze(['SLOBS: THE COMPLETE BROADCAST ANTHOLOGY','','Technician Arthur Pendelton','Sonar Operator Elena Vance','Orbital Relay Specialist Marcus Sterling','Dr. Julian Mercer','Dr. Clara Vance-Mercer','','Thank you for listening.']);
+const ECOL = ['#ffd98a','#ffb347','#6fe8ff','#7dffa1','#ffc86b','#9af0d0'];
+function playOmega(){ aInit(); show('omega'); $('arch').style.display='none'; $('omArch').style.display='none'; const cv=$('omc'); cv.width=innerWidth; cv.height=innerHeight; OM.on=true; OM.t0=performance.now();
+  try{ if(A.ctx){ const c=A.ctx,t0=c.currentTime; const g=c.createGain(); g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(.5,t0+26); g.gain.setValueAtTime(.5,t0+27); g.gain.linearRampToValueAtTime(0,t0+31); g.connect(A.m);
+    [197.4,246.75,296.1,394.8,493.5].forEach((f,i)=>{ const o=c.createOscillator(); o.type=i%2?'triangle':'sine'; o.frequency.value=f; o.detune.value=(i-2)*5; o.connect(g); o.start(t0); o.stop(t0+32); OM.osc.push(o); });
+    const g2=c.createGain(); g2.gain.setValueAtTime(0,t0+36); g2.gain.linearRampToValueAtTime(.25,t0+40); g2.gain.linearRampToValueAtTime(0,t0+58); g2.connect(A.m); [440,554.4,659.3,880].forEach(f=>{ const o=c.createOscillator(); o.frequency.value=f; o.connect(g2); o.start(t0+36); o.stop(t0+58); OM.osc.push(o); }); OM.gains=[g,g2]; OM.tm=setTimeout(()=>noise(1.4,.8,3000,'highpass'),27000); } }catch(e){}
+  (function loop(){ if(!OM.on) return; drawOmega((performance.now()-OM.t0)/1000); OM.raf=requestAnimationFrame(loop); })(); }
+function stopOmega(){ OM.on=false; cancelAnimationFrame(OM.raf); clearTimeout(OM.tm); OM.osc.forEach(o=>{ try{o.stop();}catch(e){} }); OM.gains.forEach(g=>{ try{g.disconnect();}catch(e){} }); OM.osc=[]; OM.gains=[]; show(null); }
+function drawOmega(t){ const cv=$('omc'),x=cv.getContext('2d'),w=cv.width,h=cv.height; x.fillStyle='#000'; x.fillRect(0,0,w,h);
+  const amp=Math.min(1,t/3)*(t<27?1:t<34?1-(t-27)/7:0), inv=t>=27;
+  for(let i=0;i<6;i++){ const y=h*(.12+i*.088); x.strokeStyle=ECOL[i]; x.lineWidth=2; x.globalAlpha=.9*Math.min(1,Math.max(0,(t-i*1.5)/2)); x.beginPath(); for(let s=0;s<w;s+=4){ const v=Math.sin(s*.03+t*3+i)*28*amp; const yy=y+(inv&&t>29?v*.4*Math.cos((t-29)*.6):v); s?x.lineTo(s,yy):x.moveTo(s,yy); } x.stroke(); if(inv&&amp>0){ x.strokeStyle='rgba(255,255,255,.35)'; x.beginPath(); for(let s=0;s<w;s+=4){ const v=-Math.sin(s*.03+t*3+i)*28*amp; s?x.lineTo(s,y+v):x.moveTo(s,y+v); } x.stroke(); } x.globalAlpha=1; x.fillStyle=ECOL[i]; x.font='12px monospace'; x.fillText(CH[ERAS6[i]].year,10,y-22); }
+  const cx=w/2,cy=h*.68,rad=Math.min(w,h)*.17*(t<27?1:Math.max(0,1-(t-27)/7)); if(rad>1){ x.strokeStyle='rgba(255,255,255,.5)'; x.lineWidth=2; x.beginPath(); x.arc(cx,cy,rad,0,7); x.stroke(); for(let i=0;i<6;i++){ const a=-1.57+i*1.0472+t*.4; x.fillStyle=ECOL[i]; x.beginPath(); x.arc(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad,7,0,7); x.fill(); } }
+  let cap=''; CAPS.forEach(c=>{ if(t>=c[0]) cap=c[1]; }); if(t<48){ x.fillStyle='#fff'; x.font='bold '+Math.max(14,Math.min(26,w/30))+'px monospace'; x.textAlign='center'; x.fillText(cap,w/2,h*.93); x.textAlign='left'; }
+  if(t>=27&&t<29){ x.fillStyle='rgba(255,255,255,'+(1-(t-27)/2)+')'; x.fillRect(0,0,w,h); }
+  if(t>=47){ x.fillStyle='#fff'; x.font='bold 18px monospace'; x.textAlign='center'; CRED.forEach((l,i)=>{ const y=h-(t-47)*40+i*34; if(y>-30&&y<h+30) x.fillText(l,w/2,y); }); x.textAlign='left'; }
+  if(t>=58&&(IDS6.every(i=>SV.custom420Cleared[i])&&bossDone())) $('omArch').style.display=''; }
+function showArch(){ const a=$('arch'); a.style.display='block'; let p=0; (function f(){ a.textContent=ARCH.slice(0,p); p+=2; if(p<ARCH.length+2&&a.style.display==='block') setTimeout(f,25); })(); }
+
+/* ---------- ultimate custom night ---------- */
+let ucn = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+try{ const r=JSON.parse(localStorage.getItem(CFGKEY)); if(Array.isArray(r)&&(r.length===5||r.length===6)&&r.every(a=>Array.isArray(a)&&a.length===4&&a.every(v=>Number.isInteger(v)&&v>=0&&v<=20))){ ucn=r; while(ucn.length<6) ucn.push([0,0,0,0]); } }catch(e){}
+function ucnSum(){ const tot=ucn.flat().reduce((a,b)=>a+b,0), n=ucn.filter(a=>a.some(v=>v>0)).length; $('uSum').textContent='THREAT INDEX '+tot+' / 480 | '+n+' shift'+(n===1?'':'s')+' in gauntlet'; $('uGo').disabled=!n; try{ localStorage.setItem(CFGKEY,JSON.stringify(ucn)); }catch(e){} }
+function buildUcn(){ const g=$('ucnGrid'); g.innerHTML=''; for(let i=1;i<=6;i++){ const d=document.createElement('div'); d.className='card'; d.style.setProperty('--c',CH[i].col); d.innerHTML='<h3>CH-0'+i+' '+CH[i].short+' <small>'+CH[i].year+'</small></h3>';
+  CH[i].mons.forEach((m,j)=>{ const r=document.createElement('label'); r.className='mrow'; r.innerHTML='<span>'+m+'</span><input type="range" min="0" max="20" value="'+ucn[i-1][j]+'"><b>'+ucn[i-1][j]+'</b>'; const inp=r.querySelector('input'),b=r.querySelector('b'); inp.oninput=()=>{ ucn[i-1][j]=+inp.value; b.textContent=inp.value; ucnSum(); }; d.appendChild(r); }); g.appendChild(d); } ucnSum(); }
+function setAll(f){ ucn=ucn.map(a=>a.map(()=>f())); buildUcn(); }
+function beginUcn(){ let q=[1,2,3,4,5,6].filter(g=>ucn[g-1].some(v=>v>0)); const o=$('uOrd').value; if(o==='chrono') q=ERAS6.filter(g=>q.includes(g)); else if(o==='rand') q.sort(()=>Math.random()-.5); if(!q.length) return;
+  try{ sessionStorage.setItem('SLOBS_UCN',JSON.stringify({i:0,queue:q.map(g=>({g:'slobs'+g,ai:ucn[g-1].slice()}))})); sessionStorage.removeItem('SLOBS_UCN_DONE'); }catch(e){ toast('Browser storage is blocked; the gauntlet cannot start.'); return; }
+  window.location.href='SLOBS_'+q[0]+'.html#ucn'; }
+
+const GEN = Object.freeze([
+ 'Every shift runs exactly 7 minutes, from 12:00 AM to 6:00 AM. Survive until the clock hits 6:00 AM.',
+ 'Look around with A/D, the arrow keys, or by clicking the screen edges. Each station has a center desk, a left wall and a right wall.',
+ 'Games 2-5 show buttons along the bottom for whichever wall you face. You can also click the 3D objects. Game 1 uses 3D clicks and keys only.',
+ 'Press ESC or the || PAUSE button to freeze everything, including the audio.',
+ 'Nights 1-5 are the story and unlock each other in order. Night 6 (Overtime) is much harder. Night 7 is the Custom Night: set each monster from 0 to 20.',
+ '4/20 MAX MODE sets all four monsters to level 20. Clear it to earn the gold star badge for that station.',
+ 'Each night clear unlocks an encrypted tape. Read them in the Master Lore Terminal. Surviving Night 5 in all six chapters (Chapter 6 is required) unlocks CH-00, the final boss level.',
+ 'Every monster has a warning sign and a counter. Learn the pattern, handle the closest threat first, and do not waste resources.']);
+const GD = Object.freeze({"1": {"ctl": "Center: CAM 1-4 buttons (keys 1-4), MONITOR (M), FLASH (F), tuner COARSE/FINE (J/L and I/K), DECOY (V). Left wall: SHUT/OPEN the steel door (C). Right wall: the 3x3 fuse grid and the generator crank.", "m": [["A weeping-angel stalker. It moves through four cameras (Roof, Stairs, Hall, Desk) only while you are NOT watching its camera. At the Desk it climbs out of the monitor.", "Find which camera it is on, then keep that camera up so it freezes. FLASH while watching it to shove it back a step (10s cooldown, 4% power). Turning the monitor off makes it move faster."], ["Hijacks the scope. Two tones play, the target and yours. When they are close you hear a slow beating.", "Use COARSE and FINE tuning until the beat slows and stops, then hold it for 2.5 seconds. Listen, do not guess."], ["Walks Roof, Stairs, Hall, then knocks at the door: three knocks, then he tests the handle 0.6 to 1.8 seconds after the third.", "Shut the door right after knock 3 and keep it shut until he leaves. Door stamina drains while shut, so do not hold it early. Decoys (4 per night) push him back two steps."], ["Scrambles the 3x3 fuse grid. Faults drain signal integrity. At zero (or 0% power) you black out.", "It is a lights-out puzzle: clicking a fuse flips it and its four neighbours. Turn every fuse green. In a blackout, crank the generator to 100 within 9 seconds."]]}, "2": {"ctl": "Center: DISH left/right (Q/E), PULSE (P), KILL-SWITCH (K). Left: SEAL the bulkhead (S). Right: STOP PIPE 1-3 (keys 1-3), O2 CAN (O). Almost everything you do makes noise.", "m": [["A fake ping with a red double echo creeps toward the center from one bearing.", "Rotate the dish so the green cone covers the double echo (within 25 degrees) and pulse. You have 3 charges and one regenerates every 12 seconds. A miss still makes noise."], ["Foul a ballast pipe. Each fouled pipe raises hull pressure. At 100% the viewport cracks.", "On the right panel a needle spins around each fouled gauge. Press STOP when it is inside the green arc. A miss speeds the needle up and locks the button briefly."], ["Walks to your hatch. Noise makes him bang harder.", "Seal the bulkhead when he arrives, then stay quiet (noise under 8%) for 3 seconds and he leaves. Sealing drains oxygen fast, so use the O2 cans."], ["A proximity spike warns that it is near.", "Hit the kill-switch within 6 seconds, then stay silent for the whole 9-second pass. Noise above 30% or turning the lights back on gets you killed. Never pulse while it is near."]]}, "3": {"ctl": "Center: the 5x5 packet grid, ACCEPT (Y), PURGE (N). Left: close or open the cupola panels LEFT/CENTER/RIGHT (Z/X/C). Right: duct gates 1-3 and the DUCT PURGE (G).", "m": [["Knocks on the cupola glass from one of three segments. The knocks are stereo-panned.", "Listen for the side the knocking comes from and close that panel. He leaves after 2 seconds. Leave it open through 7 seconds of knocking and he gets in. Closed panels drain reserve power."], ["A flare corrupts the telemetry grid. Cells flash red (corrupt) or amber (decoy).", "Click red cells before they expire. Never click amber. Clear 10 to end it. Missed red cells fill the corruption meter."], ["Houston calls with a 4-digit hex code. About half are fakes, one character off a valid code. The valid codes change every hour.", "Check the current hour in the codebook strip at the top. Accept real, purge fake. Accepting a fake or ignoring one kills you. Purging a real call locks comms for 8 seconds."], ["Crawls through a duct graph toward your chair, preferring forward routes.", "Close gates to block routes and steer it into dead ends. A gate closed on it pushes it back. Closed gates raise CO2, and it gnaws a gate open after about 6 seconds. DUCT PURGE sends it back to the start for 25% CO2."]]}, "4": {"ctl": "Center: TV channel 1-4, DEGAUSS x3 (G), reel speed buttons (Z/X for A, C/V for B), PERISCOPE (P) and scope left/right (Q/E). Left: patchbay jacks. Right: pump each of the four doors.", "m": [["Detunes the tape reels so their speeds drift.", "Keep BOTH reels near 1.00x with the speed buttons. Drifting outside 0.75 to 1.25 fills its meter, steady tape drains it."], ["A 1970s announcer appears on one TV channel. He drains stability and pulls your camera.", "Flip through the TV channels to find the one showing him, then press DEGAUSS three times within 2 seconds. Degaussing on the wrong channel makes it worse."], ["Comes down one of four tunnels (N/E/S/W) toward that tunnel's blast door.", "Use the periscope and rotate the scope to find his tunnel. Pump THAT door to 80% (it bleeds slowly). Sealed, he retreats after 4 seconds. Unsealed for 5 seconds and he gets in."], ["Jumps across the patchbay one column at a time. Steady red jacks are real, flickering ones are decoys.", "Unplug the steady jacks. That removes it and every jack after it. Unplugging a decoy lets it jump ahead. Four columns and the loop closes."]]}, "5": {"ctl": "Center: four voice-polarity switches (keys 1-4). Left: six roof panels (U I O J K L) and the THERMAL ARC (T). Right: dump capacitors A/B/C (G/H/Y).", "m": [["Four voices demand a polarity pattern, and the pattern flips one bit every 7 seconds.", "Keep your four switches matching the CHORUS pattern shown on the top bar. The more bits wrong, the faster its meter rises."], ["Hovers over one of six roof panels (highlighted) and floods the dome with radiation under it. It drifts to a neighbouring panel every 6 seconds.", "Close the highlighted panel. Panels overheat and reopen after 9 seconds, then cool down for 6, so keep chasing it. Closed panels drain reserve."], ["Prowls outside the dome. Noise and movement raise his detection.", "While the note says he is prowling, stay still: do not swivel or press buttons. If detection hits 100% he pounds the airlock, so fire the THERMAL ARC to drive him off (it works while he prowls too)."], ["Three capacitors charge at different speeds.", "Dump each capacitor once it is over 35% (wasted below that). Dumping between 70% and 95% also vents the others by 15%. Any at 100% means meltdown."]]}, "6": {"ctl": "Left: rotate the lamp (Q/E) and strike matches (R). Center: short and long foghorn (Z/X). Right: close inlets (keys 1-3), pump (Space), refill oil (O).", "m": [["A drowned sailor walks the horizon. The radar shows his bearing and he keeps moving.", "Rotate the lamp to keep the beam within 15 degrees of him for about 2 seconds. In the dark he gains twice as fast."], ["A ghostly horn plays 3 to 5 blasts. At higher levels the pattern is hidden after 2.5 seconds.", "Repeat the blast pattern exactly with SHORT and LONG. A wrong blast resets your input and speeds it up."], ["Floods the cellar through glowing inlets on the right.", "Close the glowing (red) inlets first, then pump the bilge. Pumping with an inlet open barely helps. At 100% you drown."], ["Snuffs the lamp flame. Fifteen seconds of darkness is fatal.", "Strike a match when the meter is in the green band and there is no GUST. Two good strikes relight it. You only have 5 matches. Refill oil with O. Oil only drains while the lamp burns."]]}});
+const BOSSG='<h3>CH-00 &bull; OMEGA: THE ARCHITECT (FINAL BOSS)</h3><p>Unlocks after you survive Night 5 of all six chapters. One 7-minute shift. Drain the Architect\'s Loop Integrity to 0% before 6:00 AM.</p><p><span class="k">THREATS:</span> six signature threats from the chapters appear on the board at the top of the screen, up to 2, 3 then 4 at once as the phases speed up. Each has a timer.</p><div class="mon"><b>The Anchor</b> (CENTER)<br>Switch the camera it is on.</div><div class="mon"><b>Depth Echo</b> (LEFT)<br>Fire the sonar pulse.</div><div class="mon"><b>The Echo</b> (RIGHT)<br>Check the code against the codebook strip: Accept real codes, Purge fakes.</div><div class="mon"><b>Patient Zero</b> (RIGHT)<br>Unplug the jack number shown (keys 1-6).</div><div class="mon"><b>The Chorus</b> (CENTER)<br>Set the polarity it asks for.</div><div class="mon"><b>The Mariner</b> (LEFT)<br>Rotate the lamp onto the bearing and hold it.</div><p><span class="k">RULES:</span> every cleared threat damages the boss (chain clears quickly for combo damage). Every missed threat costs 25% Stability, and a wrong jack costs 4%. Run out of Stability or time and the loop restarts. Defeat the Architect to unlock the true ending.</p>';
+function openGuide(t){ aInit(); const tabs=$('gtabs'); tabs.innerHTML=''; ['HOW TO PLAY',1,2,3,4,5,6,'CH-00 BOSS'].forEach((k,i)=>{ const b=document.createElement('button'); b.textContent=(i&&i<7)?'CHAPTER '+k:k; if(i===t) b.className='sel'; b.onclick=()=>{ click(); openGuide(i); }; tabs.appendChild(b); });
+  const el=$('gbody'); let h=''; document.documentElement.style.setProperty('--c',CH[t===7?0:t].col);
+  if(t===7) h=BOSSG; else if(t===0) h='<h3>THE BASICS</h3><ul>'+GEN.map(l=>'<li>'+l+'</li>').join('')+'</ul>';
+  else { const c=CH[t], g=GD[t]; h='<h3>SLOBS CHAPTER '+t+' &bull; '+c.year+' &bull; '+c.title+'</h3><p>'+c.who+'</p><p><span class="k">CONTROLS:</span> '+g.ctl+'</p>'+c.mons.map((n,i)=>'<div class="mon"><b>'+n+'</b><br><span class="k">What it does:</span> '+g.m[i][0]+'<br><span class="k">How to survive:</span> '+g.m[i][1]+'</div>').join(''); }
+  el.innerHTML=h; el.scrollTop=0; show('guide'); }
+
+/* ---------- ui wiring ---------- */
+function show(id){ document.querySelectorAll('.ov').forEach(e=>e.classList.remove('on')); if(id) $(id).classList.add('on'); }
+const bar=$('bar'); [['\u25C0 PREV',()=>setPos(pos-1)],['NEXT \u25B6',()=>setPos(pos+1)],['MASTER LORE TERMINAL',openLore],['ULTIMATE CUSTOM NIGHT',()=>{ aInit(); buildUcn(); show('ucn'); }],['SOUND: ON',null],['HOW TO PLAY / BESTIARY',()=>openGuide(pos>=1?pos:0)],['RESET ALL PROGRESS',()=>show('confirm')]].forEach(([t,f],i)=>{ const b=document.createElement('button'); b.textContent=t; if(i===4){ b.onclick=()=>{ aInit(); A.mute=!A.mute; if(A.m) A.m.gain.value=A.mute?0:A.vol; b.textContent='SOUND: '+(A.mute?'OFF':'ON'); }; } else b.onclick=()=>{ aInit(); f(); }; bar.appendChild(b); });
+$('bLoreX').onclick=()=>show(null); $('bGuideX').onclick=()=>show(null); $('uX').onclick=()=>show(null); $('uGo').onclick=beginUcn;
+$('uMax').onclick=()=>setAll(()=>20); $('uMid').onclick=()=>setAll(()=>10); $('uClr').onclick=()=>setAll(()=>0); $('uRnd').onclick=()=>setAll(()=>Math.random()<.25?0:Math.random()*21|0);
+$('omX').onclick=stopOmega; $('omArch').onclick=showArch;
+$('rNo').onclick=()=>show(null);
+$('rYes').onclick=()=>{ const o=defSave(); save(o); try{ localStorage.removeItem(CFGKEY); sessionStorage.removeItem('SLOBS_UCN'); }catch(e){} ucn=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]; show(null); refresh(); toast('All progress wiped. A fresh signed save was written.'); };
+addEventListener('keydown',e=>{ const k=e.key.toLowerCase(); const open=document.querySelector('.ov.on');
+  if(k==='escape'){ if(OM.on) stopOmega(); else if(open) show(null); return; } if(open) return;
+  if(k==='arrowleft') setPos(pos-1); else if(k==='arrowright') setPos(pos+1); else if('0123456'.includes(k)&&k.length===1) setPos(+k,true); else if(k==='enter'){ const b=$('bGo'); if(b) b.click(); } else if(k==='l') openLore(); else if(k==='h') openGuide(pos>=1?pos:0); else if(k==='u'){ aInit(); buildUcn(); show('ucn'); } });
+const rc=null; let RC, MV;
+function pick(e){ if(!ready) return null; RC=RC||new T.Raycaster(); MV=MV||new T.Vector2(); MV.set(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1); RC.setFromCamera(MV,Cam); const h=RC.intersectObjects(picks,false)[0]; return h?h.object.userData:null; }
+$('c').addEventListener('pointerdown',e=>{ aInit(); const u=pick(e); if(!u) return; if(u.a==='knob') setPos(pos+1,true); else if(u.a==='ch') setPos(u.i,true); });
+$('c').addEventListener('pointermove',e=>{ mx=e.clientX/innerWidth*2-1; my=-(e.clientY/innerHeight*2-1); $('c').style.cursor=pick(e)?'pointer':'default'; });
+$('c').addEventListener('wheel',e=>{ aInit(); setPos(pos+(e.deltaY>0?1:-1),true); e.preventDefault(); },{passive:false});
+document.addEventListener('visibilitychange',()=>{ try{ if(A.ctx) document.hidden?A.ctx.suspend():A.ctx.resume(); }catch(e){} });
+addEventListener('resize',()=>{ if(!ready) return; Cam.aspect=innerWidth/innerHeight; Cam.updateProjectionMatrix(); R.setSize(innerWidth,innerHeight,false); });
+
+/* ---------- boot ---------- */
+try{ sessionStorage.removeItem('SLOBS_UCN'); if(sessionStorage.getItem('SLOBS_UCN_DONE')){ sessionStorage.removeItem('SLOBS_UCN_DONE'); toast('ULTIMATE CUSTOM NIGHT CLEARED. The gauntlet is complete.',8000); } }catch(e){}
+if(TAMPER) toast('Tampered or corrupted save detected. Progress was reset to a clean signed save.',9000);
+try{ if(!T) throw 0; build(); GFX.theme={launcher:true,wall:'concrete',prop:'metal',haze:0x3a5a4a,p:'dust',pc:0xdde8ee}; gfxInit(0,4.8,5,0,1.4,1); requestAnimationFrame(frame); }catch(e){ toast('3D engine failed to load (Three.js CDN unreachable). Menus still work.',9000); }
+if(location.hash==='#omega') pos=0;
+renderInfo(); addEventListener('pointerdown',()=>aInit(),{once:true});
+})();
+</script></body></html>
